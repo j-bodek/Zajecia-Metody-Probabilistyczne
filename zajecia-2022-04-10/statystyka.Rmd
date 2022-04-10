@@ -1,0 +1,167 @@
+---
+title: "statystyka"
+output:
+  ioslides_presentation:
+    logo: rlogo.png
+date: '2022-04-10'
+---
+
+<style>
+.table{
+width:800px;
+display:flex;
+}
+.column{
+width: 400px;
+}
+</style>
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Wykorzystanie Stylów
+
+- Link do strony <http://rmarkdown.rstudio.com>.
+- Link przesłonięty [rstudio](http://rmarkdown.rstudio.com)
+
+
+- **Pogrubienie** <b>Pogrubienie</b>
+- *Kursywa* <i>Kursywa</i>
+
+## Wypunktowanie
+
+1. Prezentacje należey skomplilować do pliku:
+  - ioslides_presentation, 
+  - slidy_presentation,
+  - html_document,
+<br>
+2. Poruszenie się po slideach
+<br>
+3. Wstawianie rysunku ![Logo rstudio](rlogo.png)
+<br>
+
+## Kolumny
+
+![Rstudio Logo](rlogo.png)
+<div class="table">
+<div class="column">
+### lewa kolumna
+```{r}
+wynik<-c(114, 88, 59, 61, 78, 56, 62, 102, 47, 67, 117, 91, 85, 103, 134, 61, 80, 133, 121, 125, 120, 67, 85, 91, 93, 92, 34, 116, 99, 116, 91, 90, 85, 31, 82, 73, 160, 90, 68, 51, 133, 59, 113, 118, 94, 64, 77, 55, 137, 73)
+summary(wynik)[3:4]
+```
+</div>
+<div class="column">
+### prawa kolumna
+```{r, echo=T, eval=T}
+head(wynik)
+```
+</div>
+
+</div>
+
+
+
+## Slide with R Output
+
+```{r caars, echo=TRUE}
+plot(wynik,type="b",xlab="", ylab="oceny", main = "Zakres ocen",col="red",pch=19)
+```
+
+## Wymagania do projektu zaliczeniowego
+
+- statystykie opisowe z wnioskami dane -> [link](https://archive.ics.uci.edu/ml/datasets.php)
+- histogram częstości
+- box-plot
+- testowanie hipotez
+
+## Przykładowe dane
+Dane 'wholesale customers' UCI Machine Learning Repository
+
+```{r, echo=TRUE}
+dane<-read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/00292/Wholesale%20customers%20data.csv")
+head(dane)
+```
+
+## Miary pozycyjne
+
+min/max wydatki na mleko
+```{r}
+d<-dane$Milk
+min(d); max(d)
+```
+
+kwartyle
+```{r}
+quantile(d)
+```
+
+## Miary pozycyjne
+mediana
+```{r}
+median(d)
+```
+
+średnia
+```{r}
+mean(d)
+```
+
+## Miary rozproszenia (1)
+- rozstęp (min - max)
+```{r}
+max(d) - min(d)
+```
+
+- rozstęp międzykwartylny (różnica między czwarym a drugim kwartylem)
+```{r}
+quantile(d)[4] - quantile(d)[2]
+```
+
+- odchylenie przeciętne od mediany
+```{r}
+mad(d)
+```
+
+## Miary rozproszenia (2)
+
+- wariacja
+```{r}
+var(d)
+```
+
+- odchylenie standardowe
+```{r}
+sd(d)
+```
+
+- błąd standardowy
+```{r}
+sd(d)/sqrt(length(d))
+```
+
+- współczynnik zmienności
+```{r}
+sd(d)/mean(d)
+```
+
+
+## Histogram Częstości
+
+```{r}
+hist(d, breaks=7, probability=T, col=rainbow(9), ylab="")
+rug(d, col="red")
+# dorysowanie gestosci empirycznej
+lines(density(d), lty=3, lwd=3, col="black")
+# dorysowanie gestosci teoretycznej
+curve(dnorm(x, mean=mean(d), sd=sd(d)),
+add=T, col="darkgreen", lty=3, lwd=3)
+```
+
+## Box-Plot
+```{r}
+boxplot(d, col="lightblue", horizontal=T)
+```
+
